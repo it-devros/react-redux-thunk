@@ -1,0 +1,318 @@
+body {
+    background-color: #ebebeb;
+}
+
+.white-bg {
+    background-color: #fff;
+}
+
+.box-shadow {
+    box-shadow: -2px 1px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.well {
+    box-shadow: none;
+}
+
+.bg-svg {
+    background: #fff url(../images/setting-bg.png) no-repeat bottom center/100%;
+    width: 100%;
+    padding-bottom: 115px;
+}
+
+.profile-setting .user {
+    padding-left: 55px;
+    position: relative;
+}
+
+.profile-setting .user img {
+    width: 45px;
+    position: absolute;
+    left: 0;
+    border: 1px solid #999;
+    border-radius: 50%;
+    padding: 3px;
+}
+
+.profile-setting .user .name {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+.profile-setting .list-group {
+    color: #7f7f7f;
+}
+
+.profile-setting .list-group-item {
+    padding: 15px;
+    color: inherit;
+    font-weight: 100;
+    margin-top: -1px;
+}
+
+.profile-setting .list-group .fa {
+    color: #288feb;
+    margin-right: 5px;
+}
+
+.profile-setting .list-group-item.active,
+.profile-setting .list-group-item.active:focus,
+.profile-setting .list-group-item.active:hover {
+    background-color: #288feb;
+    border-color: #288feb;
+    color: #fff;
+}
+
+.profile-setting .list-group-item.active::after {
+    content: "\f105";
+    font: normal normal normal 14px/1 FontAwesome;
+    padding: 2px 0px;
+    float: right;
+}
+
+.profile-setting .list-group-item.active .fa,
+.profile-setting .list-group-item.active:focus .fa,
+.profile-setting .list-group-item.active:hover .fa {
+    color: inherit;
+}
+
+.profile-setting .header {
+    border-bottom: 1px solid #efefef;
+    margin: 0;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.profile-setting article h5 {
+    font-weight: 600;
+    margin-left: -15px;
+}
+
+.profile-setting .action a {
+    margin: 0 5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.profile-setting .checkbox,
+.profile-setting .radio {
+    margin: 0;
+}
+
+.profile-setting .col-tb .d-inline-block {
+    padding: .2rem 0;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .profile-setting .col-tb .d-inline-block {
+        display: table-cell;
+        padding: .5rem 8px;
+        width: auto;
+    }
+    .profile-setting .col-tb  + .col-tb {
+        border-top: 1px solid #ddd;
+    }
+}
+
+@media (max-width: 767px) {
+    .profile-setting .col-tb .d-inline-block {
+        padding: .2rem 8px;
+    }
+}
+
+@media (max-width: 991px) {
+    .profile-setting article h5 + .col-xs-12 {
+        padding: 0;
+    }
+}
+
+/*
+post jobs style
+----------------------------------- */
+.jobs {
+    display: table;
+    width: 100%;
+}
+
+.jobs .btn + .btn {
+    margin-left: 10px;
+}
+
+.jobs img,
+.jobs .detail {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.jobs img {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.jobs .detail {
+    width: 84%;
+    padding-left: 20px;
+}
+
+.jobs .date {
+    color: #288feb;
+}
+
+.jobs .detail h4 {
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.jobs .detail .street {
+    color: #999999;
+}
+
+.jobs .detail .company-name,
+.jobs .detail .street,
+.jobs .detail .date {
+    font-size: 13px;
+}
+
+.jobs .detail h4,
+.jobs .detail .company-name,
+.jobs .detail .street,
+.jobs .detail .date {
+    margin-bottom: 5px;
+}
+
+/*
+review style
+----------------------------------- */
+.review-list {
+    display: table;
+    width: 100%;
+}
+
+.review-list + .review-list {
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.review-list img,
+.review-list .detail {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.review-list img {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.review-list .detail {
+    width: 84%;
+    padding-left: 20px;
+}
+
+.review-list .date {
+    color: #288feb;
+}
+
+.review-list .detail .company-name {
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.review-list .detail .street {
+    color: #999999;
+}
+
+.review-list .detail .company-name,
+.review-list .detail .street,
+.review-list .detail .date {
+    margin-bottom: 5px;
+}
+
+.review .rating-xs {
+    font-size: 1.3em;
+}
+
+.rating-container .filled-stars {
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+}
+
+/*
+check in/out style
+----------------------------------- */
+.time .well {
+    padding: 10px 16px 20px 16px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.time .count {
+    font-size: 30px;
+    color: #757d81;
+    font-weight: 400;
+    border-bottom: 1.5px dashed #288feb;
+}
+
+.time .name {
+    color: #757d81;
+    font-size: 13px;
+    padding-top: 4px;
+}
+
+@media (max-width: 480px) {
+    .jobs,
+    .review-list {
+        display: block;
+    }
+
+    .jobs img,
+    .review-list img {
+        width: 100px;
+        margin: auto;
+    }
+
+    .jobs .detail,
+    .review-list .detail {
+        padding-left: 0;
+        padding-top: 10px;
+    }
+}
+
+@media (max-width: 366px) {
+    .jobs .btn,
+    .review-list .btn {
+        display: block;
+        width: 100%;
+    }
+
+    .jobs .btn + .btn {
+        margin-left: 0;
+    }
+
+    .time .well {
+        padding: 7px;
+    }
+}
+
+/*
+Available staff page
+-------------------------------- */
+.staff-box .media {
+    box-shadow: 0px 0px 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.staff-box .media-heading {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.staff-box .label-circle {
+    padding: 5px 12px;
+    display: inline-block;
+    font-size: 12px;
+    margin-top: 8px;
+}
