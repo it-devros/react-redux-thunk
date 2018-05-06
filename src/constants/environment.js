@@ -1,2 +1,2 @@
 
-export const API_URL = 'https://api.agentcloud.com/';
+export const API_URL = 'http://projects.thedigifrog.com/nextday_temp/api/';

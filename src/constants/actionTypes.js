@@ -1,5 +1,7 @@
 
 
-export const HOME = {
-  SET_USER_EVENTS: 'SET_USER_EVENTS',
+export const AUTH = {
+	CHECK_AUTH: 'CHECK_AUTH',
+	LOGGED_IN: 'LOGGED_IN',
+	LOGGED_OUT: 'LOGGED_OUT',
 }
