@@ -41,9 +41,10 @@ class Header extends React.Component {
 
 	clickLogOut(e) {
 		e.preventDefault();
+		console.log(this.props);
 		this.props.actions.logOut();
 		toastr["success"]("Staff logout is done.");
-		this.props.history.push("/home");
+		window.location.href = '/#/home';
 	}
 
 	render() {
@@ -126,7 +127,7 @@ class Header extends React.Component {
 							:
 								<ul className="nav navbar-nav navbar-right">
 									<li className="active">
-										<NavLink to="/home">HOME</NavLink>
+										<NavLink to="/dashboard">HOME</NavLink>
 									</li>
 									<li>
 										<NavLink to="/about">ABOUT US</NavLink>

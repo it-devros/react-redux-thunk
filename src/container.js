@@ -76,9 +76,6 @@ class Container extends React.Component {
 		this.props.actions.checkAuth();
 	}
 
-	componentDidMount() {
-	}
-
 
 	render() {
 
@@ -103,7 +100,7 @@ class Container extends React.Component {
 					:
 						<Switch>
 							<Route exact path="/" component={Home} />
-							<Route exact path="/home" component={Dashboard} />
+							<Route exact path="/dashboard" component={Dashboard} />
 							<Route exact path="/about" component={About} />
 							<Route exact path="/contact" component={Contact} />
 

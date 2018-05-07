@@ -15,6 +15,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
 	return ({
+		user: state.auth.user,
 	});
 }
 
@@ -31,7 +32,7 @@ class SideBar extends React.Component {
 		e.preventDefault();
 		this.props.actions.logOut();
 		toastr["success"]("Staff logout is done.");
-		this.props.history.push("/home");
+		window.location.href = '/#/home';
 	}
 
 	render() {
@@ -41,7 +42,7 @@ class SideBar extends React.Component {
 					<div className="user">
 						<img src={ temp_avatar } className="circle" />
 						<small>Hello,</small>
-						<div className="name">User Name</div>
+						<div className="name">{this.props.user.first_name} {this.props.user.last_name}</div>
 					</div>
 				</div>
 

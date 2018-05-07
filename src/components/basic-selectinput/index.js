@@ -23,6 +23,8 @@ class SelectInput extends React.Component {
 			if (this.validate(e.target.value)) {
 				this.setState({ error: '' });
 				this.props.changed(this.props.field, e.target.value);
+			} else {
+				this.props.changed(this.props.field, 'not_valid');
 			}
 		}
 	}

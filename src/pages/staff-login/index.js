@@ -25,24 +25,49 @@ class StaffLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: '',
+			username: '',
 			password: '',
 		}
 		this.onChangeValue = this.onChangeValue.bind(this);
 		this.submitForm = this.submitForm.bind(this);
+		this.validate = this.validate.bind(this);
 	}
 
 	submitForm(e) {
 		e.preventDefault();
-		let obj = {};
-		this.props.actions.logIn(obj);
-		toastr["success"]("Staff login is done.");
-		this.props.history.push("/home");
+		if (this.validate()) {
+			let obj = {
+				username: this.state.username,
+				password: this.state.password
+			}
+			this.props.actions.logInStaff(obj).then((res) => {
+				toastr["success"]("Staff login is done.");
+				this.props.history.push("/dashboard");
+			}).catch((err) => {
+				toastr["error"]("Staff login failed.");
+			});
+		}
+		
 	}
 
 	onChangeValue(field, val) {
-		if (field == 'email') this.setState({ email: val });
-		if (field == 'password') this.setState({ password: val });
+		$('#btn_login').removeAttr('disabled');
+		switch(field) {
+			case 'username':
+				val != 'not_valid' ? this.setState({ username: val }) : $('#btn_login').attr('disabled','disabled');
+				break;
+			case 'password':
+				val != 'not_valid' ? this.setState({ password: val }) : $('#btn_login').attr('disabled','disabled');
+				break;
+		}
+	}
+
+	validate() {
+		if (this.state.username == '' || this.state.password == '') {
+			toastr["error"]("Staff Form validation error.");
+			return false;
+		}
+		return true;
 	}
 
 	render() {
@@ -54,13 +79,13 @@ class StaffLogin extends React.Component {
 							<h3>Exisiting Staff Login</h3>
 							<form>
 								<div className="form-group">
-									<TextInput type={'email'} field={'email'} className={'form-control'} placeholder={'Email'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+									<TextInput type={'text'} field={'username'} className={'form-control'} placeholder={'Username'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
 								</div>
 								<div className="form-group">
 									<TextInput type={'password'} field={'password'} className={'form-control'} placeholder={'Create Password'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
 								</div>
 								<div className="form-group">
-									<button type="button" className="btn btn-info" onClick={ this.submitForm }>Login</button>
+									<button id="btn_login" type="button" className="btn btn-info" onClick={ this.submitForm }>Login</button>
 								</div>
 							</form>
 							<p>Not a member? <NavLink to="/staff/register" className="text-info">Register here</NavLink></p>

@@ -6,6 +6,20 @@ import {bindActionCreators} from 'redux';
 import TextInput from '../../components/basic-textinput';
 import SelectInput from '../../components/basic-selectinput';
 
+import * as authActions from '../../actions/auth';
+
+const mapDispatchToProps = (dispatch) => {
+	return ({
+		actions: bindActionCreators({...authActions}, dispatch),
+	});
+}
+
+const mapStateToProps = (state) => {
+	return ({
+	});
+}
+
+
 class StaffRegister extends React.Component {
 
 	constructor(props) {
@@ -20,32 +34,81 @@ class StaffRegister extends React.Component {
 			address: '',
 			city: '',
 			state: '',
-			country: '',
-			role: 3,
+			country: 'United Kingdom',
+			role_id: 3,
 		}
 		this.onChangeValue = this.onChangeValue.bind(this);
 		this.submitForm = this.submitForm.bind(this);
+		this.validate = this.validate.bind(this);
 	}
 
 	onChangeValue(field, val) {
-		if (field == 'username') this.setState({ username: val });
-		if (field == 'first_name') this.setState({ first_name: val });
-		if (field == 'last_name') this.setState({ last_name: val });
-		if (field == 'address') this.setState({ address: val });
-		if (field == 'city') this.setState({ city: val });
-		if (field == 'state') this.setState({ state: val });
-		if (field == 'email') this.setState({ email: val });
-		if (field == 'password') this.setState({ password: val });
-		if (field == 'confirm_password') this.setState({ confirm_password: val });
+		$('#btn_register').removeAttr('disabled');
+		switch(field) {
+			case 'username':
+				val != 'not_valid' ? this.setState({ username: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'first_name':
+				val != 'not_valid' ? this.setState({ first_name: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'last_name':
+				val != 'not_valid' ? this.setState({ last_name: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'address':
+				val != 'not_valid' ? this.setState({ address: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'city':
+				val != 'not_valid' ? this.setState({ city: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'state':
+				val != 'not_valid' ? this.setState({ state: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'email':
+				val != 'not_valid' ? this.setState({ email: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'password':
+				val != 'not_valid' ? this.setState({ password: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+			case 'confirm_password':
+				val != 'not_valid' ? this.setState({ confirm_password: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
+		}
 	}
 
 	submitForm(e) {
 		e.preventDefault();
-		toastr["success"]("Staff registration is done.");
+		if(this.validate()) {
+			let obj = {
+				username: this.state.username,
+				first_name: this.state.first_name,
+				last_name: this.state.last_name,
+				email: this.state.email,
+				password: this.state.password,
+				confirm_password: this.state.confirm_password,
+				address: this.state.address,
+				city: this.state.city,
+				state: this.state.state,
+				country: 'India',
+				role_id: 3
+			}
+			this.props.actions.register(obj).then((res) => {
+				toastr["success"]("Staff registration is done.");
+			}).catch((err) => {
+				toastr["error"]("Staff registration error.");
+			});
+		}
 	}
 
 	validate() {
-
+		if (this.state.username == '' || this.state.first_name == '' || this.state.last_name == '' || this.state.email == '' || this.state.password == '' || this.state.confirm_password == '' || this.state.address == '' || this.state.city == '' || this.state.state == '') {
+			toastr["error"]("Staff Form validation error. Fill all fields.");
+			return false;
+		}
+		if (this.state.password != this.state.confirm_password) {
+			toastr["error"]("Password not same");
+			return false;
+		}
+		return true;
 	}
 
 	render() {
@@ -108,7 +171,7 @@ class StaffRegister extends React.Component {
 									</div>
 								</div>
 								<div className="form-group">
-									<button type="button" className="btn btn-info" onClick={ this.submitForm }>Register Now</button>
+									<button id="btn_register" type="button" className="btn btn-info" onClick={ this.submitForm }>Register Now</button>
 								</div>
 							</form>
 							<p>Already Registered?
@@ -123,4 +186,4 @@ class StaffRegister extends React.Component {
 
 }
 
-export default StaffRegister;
+export default connect(mapStateToProps, mapDispatchToProps)(StaffRegister);

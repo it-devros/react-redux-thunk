@@ -16,6 +16,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
 	return ({
+		completedJobs: state.job.completedJobs,
 	});
 }
 
@@ -26,9 +27,14 @@ class StaffCheck extends React.Component {
 		super(props);
 		this.state = {
 		}
+		this.onChangeCheckBox = this.onChangeCheckBox.bind(this);
 	}
 
 	componentDidMount() {
+	}
+
+	onChangeCheckBox(e) {
+		e.preventDefault();
 	}
 
 	render() {
@@ -46,21 +52,24 @@ class StaffCheck extends React.Component {
 									<div className="panel-body">
 										<form className="form-horizontal">
 											<div className="form-group">
-												<label for="job" className="col-sm-3 control-label">Select Job</label>
+												<label htmlFor="job" className="col-sm-3 control-label">Select Job</label>
 												<div className="col-sm-9">
 													<select className="form-control">
-														<option value="0">Job One</option>
-														<option value="1">Job One</option>
-														<option value="2">Job One</option>
-														<option value="3">Job One</option>
+														{
+															this.props.completedJobs.map((job, index) => {
+																return (
+																	<option value={job.id}>{job.job_title}</option>
+																);
+															})
+														}
 													</select>
 												</div>
 											</div>
 											<div className="form-group">
-												<label for="job" className="col-sm-3 control-label">Check In</label>
+												<label htmlFor="job" className="col-sm-3 control-label">Check In</label>
 												<div className="col-sm-9">
 													<label className="switch">
-														<input type="checkbox" checked />
+														<input type="checkbox" checked onChange={this.onChangeCheckBox} />
 														<span className="slider round"></span>
 													</label>
 												</div>

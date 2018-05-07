@@ -15,19 +15,26 @@
 5) http://projects.thedigifrog.com/nextday_temp/api/reviews/get_review.json
 	Post : user_id (logged in user id)
 
-6 ) http://projects.thedigifrog.com/nextday_temp/api/reviews/submit_review.json
-	Post : user_id (logged in user id) , job_id (job id we will get while loading past jobs)
 
 7 ) http://projects.thedigifrog.com//nextday_temp/api/users/get_staffmembers.json
 
 8 ) http://projects.thedigifrog.com/nextday_temp/api/jobs/latest_jobs.json (will give all jobs eg: completed and in-progress)
-	 Post : user_id (logged in user id)
+     Post : user_id (logged in user id)
 
+
+
+// pending - need design
+6 ) http://projects.thedigifrog.com/nextday_temp/api/reviews/submit_review.json
+	Post : user_id (logged in user id) , job_id (job id we will get while loading past jobs)
+
+
+// pending - need design
 9) http://projects.thedigifrog.com/nextday_temp/api/jobs/post_jobs.json
      Post : job_title , skills_required (array) , job_location(array) , schedule_type , days(array) , time(array) , user_id 
      send these above mention fields in array and rest fields send me normal with empty values also
 
 
+// pending - need design
  10) http://projects.thedigifrog.com/nextday_temp/api/staffMembers/edit.json
  	 Post : job_type, availability , availability_dates, job_position , rate , location , profile_image , certificate , sms(1 or 0) , app(1 or 0) , email(1 or 0)
      (pending)
