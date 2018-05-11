@@ -24,6 +24,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
 	return ({
+		userInfo: state.auth.userInfo,
 	});
 }
 
@@ -33,10 +34,19 @@ class StaffProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			availabilities: this.props.availability,
+			availability_dates: this.props.availability_dates,
 		}
+		this.changeAvailability = this.changeAvailability.bind(this);
+		this.changeAvailabilityDates = this.changeAvailabilityDates.bind(this);
 	}
 
-	componentDidMount() {
+	changeAvailability(objList) {
+		this.setState({ availabilities: objList });
+	}
+
+	changeAvailabilityDates(objList) {
+		this.setState({ availability_dates: objList });
 	}
 
 	render() {
@@ -52,8 +62,8 @@ class StaffProfile extends React.Component {
 								<div className="well bg-svg box-shadow m-0">
 									<h4 className="header">Personal Information</h4>
 									<div className="panel-body">
-										<Availability />
-										<SpecificDates />
+										<Availability availabilities={this.state.availabilities} changeState={this.changeAvailability} />
+										<SpecificDates availability_dates={this.state.availability_dates} changeState={this.changeAvailabilityDates} />
 										<JobPosition />      
 										<Certificate />
 										<Location />     

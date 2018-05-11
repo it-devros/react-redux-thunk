@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return ({
 		user: state.auth.user,
-		completedJobs: state.job.completedJobs,
+		pastJobs: state.job.pastJobs,
 	});
 }
 
@@ -37,7 +37,7 @@ class StaffPastJob extends React.Component {
 		let obj = {
 			user_id: this.props.user.id
 		}
-		this.props.actions.getPastJobs(obj).then((res) => {
+		this.props.actions.getPastStaffJobs(obj).then((res) => {
 			if (res) {
 				toastr["success"]("Getting completed Jobs success.");
 			} else {
@@ -59,19 +59,19 @@ class StaffPastJob extends React.Component {
 							</div>
 							<div className="col-sm-8">
 								<div className="well bg-svg box-shadow m-0">
-									<h4 className="header">Post Jobs <span className="text-muted">({this.props.completedJobs.length})</span></h4>
+									<h4 className="header">Past Jobs <span className="text-muted">({this.props.pastJobs.length})</span></h4>
 									<div className="panel-body px-0">
-										{
-											this.props.completedJobs.map((job, index) => {
+									{
+											this.props.pastJobs.map((job, index) => {
 												return (
 													<div key={index} className="well well-lg white-bg">
 														<div className="jobs">
-															<img src={ job.profile_picture || default_img} className="img-responsive" alt="default-image"/>
+															<img src={ default_img} className="img-responsive" alt="default-image"/>
 															<div className="detail">
 																<h4>{ job.job_title }</h4>
-																<div className="company-name">{ job.employer.clinic_name }</div>
+																<div className="company-name">{ this.props.userInfo.clinic_name || 'No Company Name' }</div>
 																<div className="street">
-																	<span className="fa fa-map-marker"></span> { job.employer.office_location }
+																	<span className="fa fa-map-marker"></span> { this.props.userInfo.office_location }
 																</div>
 																<div className="date">
 																	<strong>

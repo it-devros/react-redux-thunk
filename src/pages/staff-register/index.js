@@ -117,6 +117,16 @@ class StaffRegister extends React.Component {
 			}
 			this.props.authAct.register(obj).then((res) => {
 				toastr["success"]("Staff registration is done.");
+				this.setState({username: ''});
+				this.setState({first_name: ''});
+				this.setState({last_name: ''});
+				this.setState({email: ''});
+				this.setState({password: ''});
+				this.setState({confirm_password: ''});
+				this.setState({address: ''});
+				this.setState({city: ''});
+				this.setState({state: ''});
+				this.setState({country: ''});
 			}).catch((err) => {
 				toastr["error"]("Staff registration error.");
 			});
@@ -169,12 +179,12 @@ class StaffRegister extends React.Component {
 									<div className="row">
 										<div className="col-sm-6">
 											<div className="form-group">
-												<SelectInput field={'state'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.state} withValid={'true'} label={'Select State'} data={this.props.states} />
+												<SelectInput field={'country'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.country} withValid={'true'} label={'Select Country'} data={this.props.countries} />
 											</div>
 										</div>
 										<div className="col-sm-6">
 											<div className="form-group">
-												<SelectInput field={'country'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.country} withValid={'true'} label={'Select Country'} data={this.props.countries} />
+												<SelectInput field={'state'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.state} withValid={'true'} label={'Select State'} data={this.props.states} />
 											</div>
 										</div>
 									</div>

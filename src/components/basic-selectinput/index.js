@@ -17,6 +17,8 @@ class SelectInput extends React.Component {
 	componentWillReceiveProps(newProps) {
 		if (newProps.initial == '' || newProps.initial == undefined) {
 			this.setState({ value: '' });
+		} else {
+			this.setState({ value: newProps.initial });
 		}
 	}
 
