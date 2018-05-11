@@ -20,12 +20,12 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return ({
 		user: state.auth.user,
-		latestJobs: state.job.latestJobs,
+		completedJobs: state.job.completedJobs,
 	});
 }
 
 
-class StaffNewJob extends React.Component {
+class ClientPastJob extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -37,20 +37,20 @@ class StaffNewJob extends React.Component {
 		let obj = {
 			user_id: this.props.user.id
 		}
-		this.props.actions.getLatestJobs(obj).then((res) => {
+		this.props.actions.getPastJobs(obj).then((res) => {
 			if (res) {
-				toastr["success"]("Getting new Jobs success.");
+				toastr["success"]("Getting completed Jobs success.");
 			} else {
-				toastr["warning"]("new Jobs not found.");
+				toastr["warning"]("Completed Jobs not found.");
 			}
 		}).catch((err) => {
-			toastr["error"]("Getting new Jobs error.");
+			toastr["error"]("Getting completed Jobs error.");
 		});
 	}
 
 	render() {
 		return ( 
-			<div id="staff-newjob-content">
+			<div id="client-pastjob-content">
 				<section className="my-gray">
 					<div className="container profile-setting">
 						<div className="row">
@@ -59,17 +59,14 @@ class StaffNewJob extends React.Component {
 							</div>
 							<div className="col-sm-8">
 								<div className="well bg-svg box-shadow m-0">
-									<h4 className="header">Latest Jobs
-										<span className="text-muted">({ this.props.latestJobs.length })</span>
-									</h4>
+									<h4 className="header">Post Jobs <span className="text-muted">({this.props.completedJobs.length})</span></h4>
 									<div className="panel-body px-0">
-
 										{
-											this.props.latestJobs.map((job, index) => {
+											this.props.completedJobs.map((job, index) => {
 												return (
 													<div key={index} className="well well-lg white-bg">
 														<div className="jobs">
-															<img src={ job.profile_picture || default_img } className="img-responsive" alt="default-image" />
+															<img src={ job.profile_picture || default_img} className="img-responsive" alt="default-image"/>
 															<div className="detail">
 																<h4>{ job.job_title }</h4>
 																<div className="company-name">{ job.employer.clinic_name }</div>
@@ -81,13 +78,14 @@ class StaffNewJob extends React.Component {
 																		<span className="fa fa-calendar"></span> { job.skills_required } { job.job_location }
 																	</strong>
 																</div>
+																<button className="btn btn-bordered-info">Post Reviews</button>
+																<button className="btn btn-bordered-info">Confirm Hours</button>
 															</div>
 														</div>
 													</div>
 												);
 											})
 										}
-										
 									</div>
 								</div>
 							</div>
@@ -101,4 +99,4 @@ class StaffNewJob extends React.Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StaffNewJob);
+export default connect(mapStateToProps, mapDispatchToProps)(ClientPastJob);

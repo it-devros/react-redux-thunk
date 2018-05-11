@@ -42,3 +42,42 @@ export const getLatestJobs = (obj) => {
 		});
 	}
 }
+
+
+export const postNewJob = (obj) => {
+	return (dispatch) => {
+		dispatch({ type: COMMON.SERVER_REQUEST });
+		return POST(api_url + "jobs/post_jobs.json", obj).then((res) => {
+			if(res.data.success == '1') {
+				dispatch({ type: COMMON.SERVER_SUCCESS });
+				return true;
+			} else {
+				dispatch({ type: COMMON.SERVER_SUCCESS });
+				return false;
+			}
+		}).catch((err) => {
+			dispatch({ type: COMMON.SERVER_FAILURE });
+			throw err;
+		});
+	}
+}
+
+
+export const getJobSkills = () => {
+	return (dispatch) => {
+		dispatch({ type: COMMON.SERVER_REQUEST });
+		return GET(api_url + "jobs/get_job_categories.json").then((res) => {
+			if(res.data.success == '1') {
+				dispatch({ type: JOB.SET_JOBS_SKILLS, items: res.data.category });
+				dispatch({ type: COMMON.SERVER_SUCCESS });
+				return true;
+			} else {
+				dispatch({ type: COMMON.SERVER_SUCCESS });
+				return false;
+			}
+		}).catch((err) => {
+			dispatch({ type: COMMON.SERVER_FAILURE });
+			throw err;
+		});
+	}
+}

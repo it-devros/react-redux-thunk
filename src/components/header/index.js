@@ -41,7 +41,6 @@ class Header extends React.Component {
 
 	clickLogOut(e) {
 		e.preventDefault();
-		console.log(this.props);
 		this.props.actions.logOut();
 		toastr["success"]("Staff logout is done.");
 		window.location.href = '/#/home';

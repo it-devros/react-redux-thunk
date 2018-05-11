@@ -17,17 +17,26 @@ import Contact from './pages/contact';
 
 import StaffLogin from './pages/staff-login';
 import StaffRegister from './pages/staff-register';
+
 import StaffReview from './pages/staff-review';
 import StaffProfile from './pages/staff-profile';
 import StaffNewJob from './pages/staff-newjob';
 import StaffPastJob from './pages/staff-pastjob';
-import AvailableStaffs from './pages/staff-available';
 import StaffSetting from './pages/staff-setting';
 import StaffCheck from './pages/staff-check';
 import StaffNotification from './pages/staff-notification';
 
 import ClientLogin from './pages/client-login';
 import ClientRegister from './pages/client-register';
+
+import ClientReview from './pages/client-review';
+import ClientProfile from './pages/client-profile';
+import ClientNewJob from './pages/client-newjob';
+import ClientPastJob from './pages/client-pastjob';
+import AvailableClients from './pages/client-available';
+import ClientSetting from './pages/client-setting';
+import ClientCheck from './pages/client-check';
+import ClientNotification from './pages/client-notification';
 
 import * as authActions from './actions/auth';
 
@@ -60,6 +69,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return ({
 		isAuthed: state.auth.isAuthed,
+		user: state.auth.user,
 	});
 }
 
@@ -97,24 +107,47 @@ class Container extends React.Component {
 							<Route exact path="/about" component={About} />
 							<Route exact path="/contact" component={Contact} />
 						</Switch>
-					:
+					: ""
+				}
+
+
+				{
+					this.props.isAuthed == true && this.props.user.role_id == "3" ?
 						<Switch>
 							<Route exact path="/" component={Home} />
 							<Route exact path="/dashboard" component={Dashboard} />
 							<Route exact path="/about" component={About} />
 							<Route exact path="/contact" component={Contact} />
 
-							// user role management
-							<Route exact path="/review" component={StaffReview} />
 							<Route exact path="/profile" component={StaffProfile} />
 							<Route exact path="/newjob" component={StaffNewJob} />
-							<Route exact path="/staffs" component={AvailableStaffs} />
 							<Route exact path="/pastjob" component={StaffPastJob} />
+							<Route exact path="/review" component={StaffReview} />
 							<Route exact path="/settings" component={StaffSetting} />
 							<Route exact path="/check" component={StaffCheck} />
-
 							<Route exact path="/notifications" component={StaffNotification} />
 						</Switch>
+					: ""
+				}
+
+				{
+					this.props.isAuthed == true && this.props.user.role_id == "2" ?
+						<Switch>
+							<Route exact path="/" component={Home} />
+							<Route exact path="/dashboard" component={Dashboard} />
+							<Route exact path="/about" component={About} />
+							<Route exact path="/contact" component={Contact} />
+
+							<Route exact path="/profile" component={ClientProfile} />
+							<Route exact path="/newjob" component={ClientNewJob} />
+							<Route exact path="/staffs" component={AvailableClients} />
+							<Route exact path="/review" component={ClientReview} />
+							<Route exact path="/pastjob" component={ClientPastJob} />
+							<Route exact path="/settings" component={ClientSetting} />
+							<Route exact path="/check" component={ClientCheck} />
+							<Route exact path="/notifications" component={ClientNotification} />
+						</Switch>
+					: ""
 				}
 
 				<Footer />

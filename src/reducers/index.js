@@ -6,6 +6,7 @@ import AuthReducer from './auth';
 import JobReducer from './job';
 import ReviewReducer from './review';
 import MemberReducer from './member';
+import CommonReducer from './common';
 
 const rootReducer = combineReducers({
 	routing: routerReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
 	job: JobReducer,
 	review: ReviewReducer,
 	member: MemberReducer,
+	common: CommonReducer,
 });
 
 export default rootReducer;

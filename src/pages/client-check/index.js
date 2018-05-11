@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
 }
 
 
-class StaffCheck extends React.Component {
+class ClientCheck extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -39,7 +39,7 @@ class StaffCheck extends React.Component {
 
 	render() {
 		return ( 
-			<div id="staff-check-content">
+			<div id="client-check-content">
 				<section className="my-gray">
 					<div className="container profile-setting">
 						<div className="row">
@@ -112,4 +112,4 @@ class StaffCheck extends React.Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StaffCheck);
+export default connect(mapStateToProps, mapDispatchToProps)(ClientCheck);

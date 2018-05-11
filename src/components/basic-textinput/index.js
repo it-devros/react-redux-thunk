@@ -14,6 +14,12 @@ class TextInput extends React.Component {
 		this.changeValue = this.changeValue.bind(this);
 	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.initial == '' || newProps.initial == undefined) {
+			this.setState({ value: '' });
+		}
+	}
+
 	changeValue(e) {
 		e.preventDefault();
 		this.setState({ value: e.target.value });

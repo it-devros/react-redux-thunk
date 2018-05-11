@@ -7,15 +7,20 @@ import TextInput from '../../components/basic-textinput';
 import SelectInput from '../../components/basic-selectinput';
 
 import * as authActions from '../../actions/auth';
+import * as commonActions from '../../actions/common';
+
 
 const mapDispatchToProps = (dispatch) => {
 	return ({
-		actions: bindActionCreators({...authActions}, dispatch),
+		authAct: bindActionCreators({...authActions}, dispatch),
+		commonAct: bindActionCreators({...commonActions}, dispatch),
 	});
 }
 
 const mapStateToProps = (state) => {
 	return ({
+		states: state.common.states,
+		countries: state.common.countries,
 	});
 }
 
@@ -34,12 +39,18 @@ class StaffRegister extends React.Component {
 			address: '',
 			city: '',
 			state: '',
-			country: 'United Kingdom',
-			role_id: 3,
+			country: '',
 		}
 		this.onChangeValue = this.onChangeValue.bind(this);
 		this.submitForm = this.submitForm.bind(this);
 		this.validate = this.validate.bind(this);
+	}
+
+	componentWillMount() {
+		this.props.commonAct.getCountries().then((res) => {
+		}).catch((err) => {
+			toastr["error"]("getting countries error.");
+		});
 	}
 
 	onChangeValue(field, val) {
@@ -63,6 +74,9 @@ class StaffRegister extends React.Component {
 			case 'state':
 				val != 'not_valid' ? this.setState({ state: val }) : $('#btn_register').attr('disabled','disabled');
 				break;
+			case 'country':
+				val != 'not_valid' ? this.setState({ country: val }) : $('#btn_register').attr('disabled','disabled');
+				break;
 			case 'email':
 				val != 'not_valid' ? this.setState({ email: val }) : $('#btn_register').attr('disabled','disabled');
 				break;
@@ -72,6 +86,16 @@ class StaffRegister extends React.Component {
 			case 'confirm_password':
 				val != 'not_valid' ? this.setState({ confirm_password: val }) : $('#btn_register').attr('disabled','disabled');
 				break;
+		}
+
+		if (field == 'country') {
+			let obj = {
+				country_id: val
+			}
+			this.props.commonAct.getStates(obj).then((res) => {
+			}).catch((err) => {
+				toastr["error"]("getting states error.");
+			});
 		}
 	}
 
@@ -88,10 +112,10 @@ class StaffRegister extends React.Component {
 				address: this.state.address,
 				city: this.state.city,
 				state: this.state.state,
-				country: 'India',
+				country: this.state.country,
 				role_id: 3
 			}
-			this.props.actions.register(obj).then((res) => {
+			this.props.authAct.register(obj).then((res) => {
 				toastr["success"]("Staff registration is done.");
 			}).catch((err) => {
 				toastr["error"]("Staff registration error.");
@@ -100,7 +124,7 @@ class StaffRegister extends React.Component {
 	}
 
 	validate() {
-		if (this.state.username == '' || this.state.first_name == '' || this.state.last_name == '' || this.state.email == '' || this.state.password == '' || this.state.confirm_password == '' || this.state.address == '' || this.state.city == '' || this.state.state == '') {
+		if (this.state.username == '' || this.state.first_name == '' || this.state.last_name == '' || this.state.email == '' || this.state.password == '' || this.state.confirm_password == '' || this.state.address == '' || this.state.city == '' || this.state.state == '' || this.state.country == '') {
 			toastr["error"]("Staff Form validation error. Fill all fields.");
 			return false;
 		}
@@ -113,9 +137,6 @@ class StaffRegister extends React.Component {
 
 	render() {
 
-		let cityList = ['Delhi', 'New York', 'Kuala Lumpur'];
-		let stateList = ['Delhi', 'New York', 'Kuala Lumpur'];
-
 		return ( 
 			<section>
 				<div className="container">
@@ -125,47 +146,50 @@ class StaffRegister extends React.Component {
 							<form>
 								<div className="col-xs-12">
 									<div className="form-group">
-										<TextInput type={'text'} field={'username'} className={'form-control'} placeholder={'Username'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+										<TextInput type={'text'} field={'username'} className={'form-control'} placeholder={'Username'} initial={this.state.username} withValid={'true'} changed={ this.onChangeValue } />
 									</div>
 									<div className="row">
 										<div className="col-sm-6">
 											<div className="form-group">
-												<TextInput type={'text'} field={'first_name'} className={'form-control'} placeholder={'First Name'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+												<TextInput type={'text'} field={'first_name'} className={'form-control'} placeholder={'First Name'} initial={this.state.first_name} withValid={'true'} changed={ this.onChangeValue } />
 											</div>
 										</div>
 										<div className="col-sm-6">
 											<div className="form-group">
-												<TextInput type={'text'} field={'last_name'} className={'form-control'} placeholder={'Last Name'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+												<TextInput type={'text'} field={'last_name'} className={'form-control'} placeholder={'Last Name'} initial={this.state.last_name} withValid={'true'} changed={ this.onChangeValue } />
 											</div>
 										</div>
 									</div>
 									<div className="form-group">
-										<TextInput type={'text'} field={'address'} className={'form-control'} placeholder={'Address'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+										<TextInput type={'text'} field={'address'} className={'form-control'} placeholder={'Address'} initial={this.state.address} withValid={'true'} changed={ this.onChangeValue } />
+									</div>
+									<div className="form-group">
+										<TextInput type={'text'} field={'city'} className={'form-control'} placeholder={'City'} initial={this.state.city} withValid={'true'} changed={ this.onChangeValue } />
 									</div>
 									<div className="row">
 										<div className="col-sm-6">
 											<div className="form-group">
-												<SelectInput field={'city'} className={'form-control'} changed={ this.onChangeValue } initial={''} withValid={'true'} label={'Select City'} data={cityList} />
+												<SelectInput field={'state'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.state} withValid={'true'} label={'Select State'} data={this.props.states} />
 											</div>
 										</div>
 										<div className="col-sm-6">
 											<div className="form-group">
-												<SelectInput field={'state'} className={'form-control'} changed={ this.onChangeValue } initial={''} withValid={'true'} label={'Select State'} data={stateList} />
+												<SelectInput field={'country'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.country} withValid={'true'} label={'Select Country'} data={this.props.countries} />
 											</div>
 										</div>
 									</div>
 									<div className="form-group">
-										<TextInput type={'email'} field={'email'} className={'form-control'} placeholder={'Email'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+										<TextInput type={'email'} field={'email'} className={'form-control'} placeholder={'Email'} initial={this.state.email} withValid={'true'} changed={ this.onChangeValue } />
 									</div>
 									<div className="row">
 										<div className="col-sm-6">
 											<div className="form-group">
-												<TextInput type={'password'} field={'password'} className={'form-control'} placeholder={'Create Password'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+												<TextInput type={'password'} field={'password'} className={'form-control'} placeholder={'Create Password'} initial={this.state.password} withValid={'true'} changed={ this.onChangeValue } />
 											</div>
 										</div>
 										<div className="col-sm-6">
 											<div className="form-group">
-												<TextInput type={'password'} field={'confirm_password'} className={'form-control'} placeholder={'Confirm Password'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+												<TextInput type={'password'} field={'confirm_password'} className={'form-control'} placeholder={'Confirm Password'} initial={this.state.confirm_password} withValid={'true'} changed={ this.onChangeValue } />
 											</div>
 										</div>
 									</div>

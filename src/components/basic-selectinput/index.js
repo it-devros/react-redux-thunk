@@ -14,6 +14,12 @@ class SelectInput extends React.Component {
 		this.changeValue = this.changeValue.bind(this);
 	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.initial == '' || newProps.initial == undefined) {
+			this.setState({ value: '' });
+		}
+	}
+
 	changeValue(e) {
 		e.preventDefault();
 		this.setState({ value: e.target.value });
@@ -44,7 +50,7 @@ class SelectInput extends React.Component {
 					<option>{this.props.label}</option>
 					{
 						this.props.data.map((opt, index) => {
-							return (<option key={index} value={ opt }>{ opt }</option>);
+							return (<option key={index} value={ opt.id }>{ opt.name }</option>);
 						})
 					}
 				</select>

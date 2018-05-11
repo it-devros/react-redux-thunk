@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
 }
 
 
-class StaffReview extends React.Component {
+class ClientReview extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -70,7 +70,7 @@ class StaffReview extends React.Component {
 
 	render() {
 		return ( 
-			<div id="staff-review-content">
+			<div id="client-review-content">
 				<section className="my-gray">
 					<div className="container profile-setting">
 						<div className="row">
@@ -118,4 +118,4 @@ class StaffReview extends React.Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StaffReview);
+export default connect(mapStateToProps, mapDispatchToProps)(ClientReview);

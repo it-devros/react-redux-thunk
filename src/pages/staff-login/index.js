@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import TextInput from '../../components/basic-textinput';
-import SelectInput from '../../components/basic-selectinput';
 
 import * as authActions from '../../actions/auth';
 
@@ -79,10 +78,10 @@ class StaffLogin extends React.Component {
 							<h3>Exisiting Staff Login</h3>
 							<form>
 								<div className="form-group">
-									<TextInput type={'text'} field={'username'} className={'form-control'} placeholder={'Username'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+									<TextInput type={'text'} field={'username'} className={'form-control'} placeholder={'Username'} initial={this.state.username} withValid={'true'} changed={ this.onChangeValue } />
 								</div>
 								<div className="form-group">
-									<TextInput type={'password'} field={'password'} className={'form-control'} placeholder={'Create Password'} initial={''} withValid={'true'} changed={ this.onChangeValue } />
+									<TextInput type={'password'} field={'password'} className={'form-control'} placeholder={'User Password'} initial={this.state.password} withValid={'true'} changed={ this.onChangeValue } />
 								</div>
 								<div className="form-group">
 									<button id="btn_login" type="button" className="btn btn-info" onClick={ this.submitForm }>Login</button>

@@ -5,6 +5,7 @@ class Auth {
 		this.isAuthed = false;
 		this.token = '';
 		this.user = {};
+		this.userInfo = {};
 	}
 
 	getState() {
@@ -12,6 +13,7 @@ class Auth {
 			isAuthed: this.isAuthed,
 			token: this.token,
 			user: this.user,
+			userInfo: this.userInfo,
 		} };
 	}
 
@@ -20,15 +22,17 @@ class Auth {
 		this.token = '';
 		this.user = null;
 		this.user = {};
-		if (window.localStorage.getItem('nextday_token') && window.localStorage.getItem('nextday_user')) {
+		if (window.localStorage.getItem('nextday_token') && window.localStorage.getItem('nextday_user') && window.localStorage.getItem('nextday_userInfo')) {
 			this.isAuthed = true;
 			this.token = window.localStorage.getItem('nextday_token');
 			let strUser = window.localStorage.getItem('nextday_user');
 			this.user = Object.assign({}, JSON.parse(strUser));
+			let strUserInfo = window.localStorage.getItem('nextday_userInfo');
+			this.userInfo = Object.assign({}, JSON.parse(strUserInfo));
 		}
 	}
 
-	loggedIn(token, user) {
+	loggedIn(token, user, userInfo) {
 		this.isAuthed = false;
 		this.token = '';
 		this.token = token;
@@ -38,6 +42,11 @@ class Auth {
 		this.user = Object.assign({}, user);
 		let strUser = JSON.stringify(user);
 		window.localStorage.setItem('nextday_user', strUser);
+		this.userInfo = null;
+		this.userInfo = {};
+		this.userInfo = Object.assign({}, userInfo);
+		let strUserInfo = JSON.stringify(userInfo);
+		window.localStorage.setItem('nextday_userInfo', strUserInfo);
 		this.isAuthed = true;
 	}
 
@@ -46,8 +55,11 @@ class Auth {
 		this.token = '';
 		this.user = null;
 		this.user = {};
+		this.userInfo = null;
+		this.userInfo = {};
 		window.localStorage.removeItem('nextday_user');
 		window.localStorage.removeItem('nextday_token');
+		window.localStorage.removeItem('nextday_userInfo');
 	}
 
 	updateUSer(user) {
@@ -70,7 +82,7 @@ const reducer = (state = AuthObj.getState(), action) => {
 			break;
 
 		case AUTH.LOGGED_IN:
-			AuthObj.loggedIn(action.token, action.user);
+			AuthObj.loggedIn(action.token, action.user, action.userInfo);
 			break;
 		case AUTH.LOGGED_OUT:
 			AuthObj.loggedOut();

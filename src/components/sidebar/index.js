@@ -54,9 +54,13 @@ class SideBar extends React.Component {
 						<NavLink to="/newjob" className="list-group-item text-uppercase">
 							<span className="fa fa-briefcase fa-fw"></span> new jobs
 						</NavLink>
-						<NavLink to="/staffs" className="list-group-item text-uppercase">
-							<span className="fa fa-users fa-fw"></span> available staff
-						</NavLink>
+						{
+							this.props.user.role_id == "2" ?
+								<NavLink to="/staffs" className="list-group-item text-uppercase">
+									<span className="fa fa-users fa-fw"></span> available staff
+								</NavLink>
+							: ""
+						}
 						<NavLink to="/pastjob" className="list-group-item text-uppercase">
 							<span className="fa fa-file-text-o fa-fw"></span> past jobs
 						</NavLink>

@@ -26,7 +26,7 @@ const mapStateToProps = (state) => {
 }
 
 
-class StaffSetting extends React.Component {
+class ClientSetting extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -67,17 +67,17 @@ class StaffSetting extends React.Component {
 			obj.last_name = this.state.last_name;
 			obj.password = this.state.password;
 			obj.address = this.state.address;
-			this.props.actions.updateStaffUser(obj).then((res) => {
-				toastr["success"]("Staff settings updated.");
+			this.props.actions.updateClientUser(obj).then((res) => {
+				toastr["success"]("Client settings updated.");
 			}).catch((err) => {
-				toastr["error"]("Staff settings updating error.");
+				toastr["error"]("Client settings updating error.");
 			});
 		}
 	}
 
 	validate() {
 		if (this.state.first_name == '' || this.state.last_name == '' || this.state.address == '') {
-			toastr["error"]("Staff Settings Form validation error. Fill all fields.");
+			toastr["error"]("Client Settings Form validation error.");
 			return false;
 		}
 		return true;
@@ -87,7 +87,7 @@ class StaffSetting extends React.Component {
 
 	render() {
 		return ( 
-			<div id="staff-setting-content">
+			<div id="client-setting-content">
 				<section className="my-gray">
 					<div className="container profile-setting">
 						<div className="row">
@@ -142,4 +142,4 @@ class StaffSetting extends React.Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StaffSetting);
+export default connect(mapStateToProps, mapDispatchToProps)(ClientSetting);
