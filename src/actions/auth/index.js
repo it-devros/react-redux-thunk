@@ -112,3 +112,16 @@ export const updateClientUser = (obj) => {
 		});
 	}
 }
+
+export const saveStaffProfile = (obj) => {
+	return (dispatch) => {
+		dispatch({ type: COMMON.SERVER_REQUEST });
+		return POST(api_url + "jobs/staffMembers/edit.json", obj).then((res) => {
+			console.log(res);
+			return true;
+		}).catch((err) => {
+			dispatch({ type: COMMON.SERVER_FAILURE });
+			throw err;
+		});
+	}
+}
