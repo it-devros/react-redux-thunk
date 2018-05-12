@@ -1,20 +1,21 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 
+import './style.scss';
 
 class UploadPhoto extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
+			profile_image: this.props.profile_image, 
 		}
 	}
 
 	render() {
 		return ( 
-			<article className="clearfix">
+			<article id="upload_photo" className="clearfix">
 				<h5>Upload Photo:</h5>
 				<div className="col-xs-12">
 					<div className="row col-tb">
@@ -31,5 +32,10 @@ class UploadPhoto extends React.Component {
 	}
 
 }
+
+Location.propTypes = {
+	profile_image: PropTypes.string,
+	changeState: PropTypes.func,
+};
 
 export default UploadPhoto;

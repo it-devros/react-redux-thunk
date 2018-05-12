@@ -18,7 +18,11 @@ class TextInput extends React.Component {
 		if (newProps.initial == '' || newProps.initial == undefined) {
 			this.setState({ value: '' });
 		} else {
-			this.setState({ value: newProps.initial });
+			if (newProps.initial == 'not_valid') {
+				this.setState({ value: '' });	
+			} else {
+				this.setState({ value: newProps.initial });
+			}
 		}
 	}
 

@@ -12,7 +12,7 @@ class SpecificDates extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			availability_dates: this.props.availability_dates,
+			availability_dates: this.props.availability_dates || [],
 			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 
@@ -45,16 +45,20 @@ class SpecificDates extends React.Component {
 		if (this.validate()) {
 			let objList = Object.assign([], this.state.availability_dates);
 			let obj = this.state.adding_day;
-			if (this.state.isEdit == -1) {
-				objList.push(obj);
+			if (objList.indexOf(obj) == -1) {
+				if (this.state.isEdit == -1) {
+					objList.push(obj);
+				} else {
+					objList[this.state.isEdit] = obj;
+				}
+				this.setState({ adding_day: "" });
+				this.setState({ availability_dates: objList });
+				this.setState({ isEdit: -1 });
+				$("#addDateModal").modal('hide');
+				this.changeParentValues();
 			} else {
-				objList[this.state.isEdit] = obj;
+				toastr["warning"]("Already inputed.");
 			}
-			this.setState({ adding_day: "" });
-			this.setState({ availability_dates: objList });
-			this.setState({ isEdit: -1 });
-			$("#addDateModal").modal('hide');
-			this.changeParentValues();
 		}
 	}
 
@@ -72,6 +76,7 @@ class SpecificDates extends React.Component {
 			}
 		});
 		this.setState({ availability_dates: objList });
+		this.changeParentValues();
 	}
 
 	onClickEditDate(e, index) {
@@ -140,7 +145,7 @@ class SpecificDates extends React.Component {
 
 	displayContent() {
 		let content = [];
-		if (this.state.availability_dates) {
+		if (this.state.availability_dates.length > 0) {
 			let today = new Date();
 			let thisMonth = this.state.months[today.getMonth()];
 			this.state.availability_dates.forEach((avail, index) => {
