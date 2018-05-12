@@ -7,6 +7,7 @@ import ContactUs from '../../components/contactus';
 import SideBar from '../../components/sidebar';
 
 import * as memberActions from '../../actions/member';
+import * as jobActions from '../../actions/job';
 
 import default_user from '../../styles/images/avatar.png';
 import './style.scss';
@@ -14,13 +15,15 @@ import './style.scss';
 
 const mapDispatchToProps = (dispatch) => {
 	return ({
-		actions: bindActionCreators({...memberActions}, dispatch),
+		memberAct: bindActionCreators({...memberActions}, dispatch),
+		jobAct: bindActionCreators({...jobActions}, dispatch),
 	});
 }
 
 const mapStateToProps = (state) => {
 	return ({
 		user: state.auth.user,
+		notCompletedJobs: state.job.notCompletedJobs,
 		staffmembers: state.member.staffmembers,
 	});
 }
@@ -33,20 +36,21 @@ class AvailableStaffs extends React.Component {
 		this.state = {
 		}
 		this.onChangeRate = this.onChangeRate.bind(this);
+		this.onChangeSelectJob = this.onChangeSelectJob.bind(this);
 	}
 
 	componentWillMount() {
 		let obj = {
 			user_id: this.props.user.id
 		}
-		this.props.actions.getStaffMember(obj).then((res) => {
+		this.props.jobAct.getJobsByEmployerNotComplete(obj).then((res) => {
 			if (res) {
-				toastr["success"]("Getting staff members success.");
+				toastr["success"]("Getting jobs success.");
 			} else {
-				toastr["warning"]("staff members not found.");
+				toastr["warning"]("staff jobs not found.");
 			}
 		}).catch((err) => {
-			toastr["error"]("Getting staff members error.");
+			toastr["error"]("Getting jobs error.");
 		});
 	}
 
@@ -68,6 +72,24 @@ class AvailableStaffs extends React.Component {
 		});
 	}
 
+	onChangeSelectJob(e) {
+		e.preventDefault();
+		if (e.target.value != 'Select a Job') {
+			let obj = {
+				job_id: e.target.value,
+			}
+			this.props.jobAct.getApplication(obj).then((res) => {
+				if (res) {
+					toastr["success"]("Getting application success.");
+				} else {
+					toastr["warning"]("Application not found.");
+				}
+			}).catch((err) => {
+				toastr["error"]("Getting application error.");
+			});
+		}
+	}
+
 	onChangeRate(e, staff_id) {
 		e.preventDefault();
 	}
@@ -83,8 +105,24 @@ class AvailableStaffs extends React.Component {
 							</div>
 							<div className="col-sm-8">
 								<div className="well bg-svg box-shadow m-0">
-									<h4 className="header">Available Staff</h4>
+									<h4 className="header">
+										Available Staff
+									</h4>
 									<div className="panel-body">
+										<div className="row">
+											<div className="col-sm-6">
+												<select id="job_list" className="form-control col-sm-6" onChange={this.onChangeSelectJob}>
+													<option>Select a Job</option>
+													{
+														this.props.notCompletedJobs.map((job, index) => {
+															return (
+																<option key={index} value={job.id}>{ job.job_title }</option>
+															);
+														})
+													}
+												</select>
+											</div>
+										</div>
 										<div className="row">
 
 											{

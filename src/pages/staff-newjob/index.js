@@ -13,7 +13,7 @@ import './style.scss';
 
 const mapDispatchToProps = (dispatch) => {
 	return ({
-		actions: bindActionCreators({...jobActions}, dispatch),
+		jobAct: bindActionCreators({...jobActions}, dispatch),
 	});
 }
 
@@ -30,14 +30,18 @@ class StaffNewJob extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isChecks: {},
 		}
+		this.onClickApply = this.onClickApply.bind(this);
+		this.onClickDecline = this.onClickDecline.bind(this);
+		this.onClickInterest = this.onClickInterest.bind(this);
 	}
 
 	componentWillMount() {
 		let obj = {
 			user_id: this.props.user.id
 		}
-		this.props.actions.getLatestJobs(obj).then((res) => {
+		this.props.jobAct.getLatestJobs(obj).then((res) => {
 			if (res) {
 				toastr["success"]("Getting new Jobs success.");
 			} else {
@@ -46,6 +50,55 @@ class StaffNewJob extends React.Component {
 		}).catch((err) => {
 			toastr["error"]("Getting new Jobs error.");
 		});
+	}
+
+	componentDidMount() {
+		let obj = {}
+		this.props.latestJobs.forEach((job, index) => {
+			obj[index] = false;
+		});
+		this.setState({ isChecks: obj });
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (newProps.latestJobs && this.props.latestJobs != newProps.latestJobs) {
+			let obj = {}
+			newProps.latestJobs.forEach((job, index) => {
+				obj[index] = false;
+			});
+			this.setState({ isChecks: obj });
+		}
+	}
+
+	onClickApply(e, jobId, index) {
+		e.preventDefault();
+		let obj = {
+			job_id: jobId,
+			user_id: this.props.user.id
+		}
+		this.props.jobAct.applyToJob(obj).then((res) => {
+			if (res) {
+				toastr["success"]("Appling to job success.");
+			} else {
+				toastr["warning"]("Appling to job success but not interected because you already applied.");
+			}
+		}).catch((err) => {
+			toastr["error"]("Appling to job failed.");
+		});
+	}
+
+	onClickDecline(e, jobId, index) {
+		e.preventDefault();
+		let obj = Object.assign({}, this.state.isChecks);
+		obj[index] = true;
+		this.setState({ isChecks: obj });
+	}
+
+	onClickInterest(e, jobId, index) {
+		e.preventDefault();
+		let obj = Object.assign({}, this.state.isChecks);
+		obj[index] = false;
+		this.setState({ isChecks: obj });
 	}
 
 	render() {
@@ -72,15 +125,31 @@ class StaffNewJob extends React.Component {
 															<img src={ job.profile_picture || default_img } className="img-responsive" alt="default-image" />
 															<div className="detail">
 																<h4>{ job.job_title }</h4>
-																<div className="company-name">{ job.employer.clinic_name }</div>
+																<div className="company-name">{ job.employer.clinic_name || 'No Company Name' }</div>
 																<div className="street">
-																	<span className="fa fa-map-marker"></span> { job.employer.office_location }
+																	<span className="fa fa-map-marker"></span> { job.job_location }
 																</div>
 																<div className="date">
 																	<strong>
-																		<span className="fa fa-calendar"></span> { job.skills_required } { job.job_location }
+																		<span className="fa fa-calendar"></span> { job.days } { job.time.split(',').length > 1 ? job.time.split(',')[0] + ':00' + '~' + job.time.split(',')[1]  + ':00' : 'No Time'  } 
 																	</strong>
 																</div>
+																{
+																	this.state.isChecks[index] == false ?
+																		<div>
+																			<button className="btn btn-bordered-info" onClick={(e) => { this.onClickApply(e, job.id, index) }}>Available</button>
+																			<button className="btn btn-bordered-danger" onClick={(e) => { this.onClickDecline(e, job.id, index) }}>Not Available</button>
+																		</div>
+																	: ""
+																}
+																{
+																	this.state.isChecks[index] == true ?
+																		<div>
+																			<button className="btn btn-bordered-danger" onClick={(e) => { this.onClickInterest(e, job.id, index) }}>Interested to apply</button>
+																		</div>
+																	: ""
+																}
+																
 															</div>
 														</div>
 													</div>

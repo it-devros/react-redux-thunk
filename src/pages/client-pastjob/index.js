@@ -72,11 +72,11 @@ class ClientPastJob extends React.Component {
 																<h4>{ job.job_title }</h4>
 																<div className="company-name">{ this.props.userInfo.clinic_name || 'No Company Name' }</div>
 																<div className="street">
-																	<span className="fa fa-map-marker"></span> { this.props.userInfo.office_location }
+																	<span className="fa fa-map-marker"></span> { job.job_location }
 																</div>
 																<div className="date">
 																	<strong>
-																		<span className="fa fa-calendar"></span> { job.skills_required } { job.job_location }
+																		<span className="fa fa-calendar"></span> { job.days } { job.time.split(',').length > 1 ? job.time.split(',')[0] + ':00' + '~' + job.time.split(',')[1]  + ':00' : 'No Time'  } 
 																	</strong>
 																</div>
 																<button className="btn btn-bordered-info">Post Reviews</button>

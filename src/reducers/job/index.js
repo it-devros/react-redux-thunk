@@ -4,6 +4,7 @@ class Job {
 	constructor() {
 		this.pastJobs = [];
 		this.latestJobs = [];
+		this.notCompletedJobs = [];
 		this.jobSkills = [];
 	}
 
@@ -12,6 +13,7 @@ class Job {
 			pastJobs: this.pastJobs,
 			latestJobs: this.latestJobs,
 			jobSkills: this.jobSkills,
+			notCompletedJobs: this.notCompletedJobs,
 		} };
 	}
 
@@ -33,6 +35,12 @@ class Job {
 		this.jobSkills = Object.assign([], items);
 	}
 
+	setNotCompletedJobs(items) {
+		this.notCompletedJobs = null;
+		this.notCompletedJobs = [];
+		this.notCompletedJobs = Object.assign([], items);
+	}
+
 }
 
 
@@ -50,6 +58,10 @@ const reducer = (state = JobObj.getState(), action) => {
 
 		case JOB.SET_JOBS_SKILLS:
 			JobObj.setJobSkills(action.items);
+			break;
+		
+		case JOB.SET_NOT_COMPLETED_JOBS:
+			JobObj.setNotCompletedJobs(action.items);
 			break;
 
 		default: return state;

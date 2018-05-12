@@ -8,12 +8,11 @@ export const getStaffMember = (obj) => {
 	return (dispatch) => {
 		dispatch({ type: COMMON.SERVER_REQUEST });
 		return POST(api_url + "users/get_staffmembers.json", obj).then((res) => {
+			dispatch({ type: COMMON.SERVER_SUCCESS });
 			if(res.data.success == '1') {
 				dispatch({ type: MEMBER.SET_STAFF_MEMBERS, items: res.data.StaffMembers });
-				dispatch({ type: COMMON.SERVER_SUCCESS });
 				return true;
 			} else {
-				dispatch({ type: COMMON.SERVER_SUCCESS });
 				return false;
 			}
 		}).catch((err) => {

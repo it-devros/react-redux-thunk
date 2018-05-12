@@ -111,7 +111,11 @@ class StaffProfile extends React.Component {
 				profile_image: this.state.profile_image,
 			}
 			this.props.authAct.saveStaffProfile(obj).then((res) => {
-				toastr["success"]("updating staff profile success.");
+				if (res) {
+					toastr["success"]("updating staff profile success.");
+				} else {
+					toastr["warning"]("updating staff profile success but not interected.");
+				}
 			}).catch((err) => {
 				toastr["error"]("updating staff profile error.");
 			});

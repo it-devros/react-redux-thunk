@@ -62,12 +62,21 @@ class Auth {
 		window.localStorage.removeItem('nextday_userInfo');
 	}
 
-	updateUSer(user) {
+	updateUser(user) {
 		this.user = null;
 		this.user = {};
 		this.user = Object.assign({}, user);
 		let strUser = JSON.stringify(user);
 		window.localStorage.setItem('nextday_user', strUser);
+	}
+
+	updateStaffProfile(item) {
+		let obj = Object.assign({}, this.userInfo, item);
+		this.userInfo = null;
+		this.userInfo = {};
+		this.userInfo = Object.assign({}, obj);
+		let strObj = JSON.stringify(obj);
+		window.localStorage.setItem('nextday_userInfo', strObj);
 	}
 
 }
@@ -88,7 +97,11 @@ const reducer = (state = AuthObj.getState(), action) => {
 			AuthObj.loggedOut();
 			break; 
 		case AUTH.UPDATE_USER:
-			AuthObj.updateUSer(action.user);
+			AuthObj.updateUser(action.user);
+			break;
+		
+		case AUTH.UPDATING_STAFF_PROFILE:
+			AuthObj.updateStaffProfile(action.item);
 			break;
 
 		default: return state;

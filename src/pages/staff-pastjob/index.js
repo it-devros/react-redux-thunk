@@ -61,7 +61,7 @@ class StaffPastJob extends React.Component {
 								<div className="well bg-svg box-shadow m-0">
 									<h4 className="header">Past Jobs <span className="text-muted">({this.props.pastJobs.length})</span></h4>
 									<div className="panel-body px-0">
-									{
+										{
 											this.props.pastJobs.map((job, index) => {
 												return (
 													<div key={index} className="well well-lg white-bg">
@@ -69,13 +69,13 @@ class StaffPastJob extends React.Component {
 															<img src={ default_img} className="img-responsive" alt="default-image"/>
 															<div className="detail">
 																<h4>{ job.job_title }</h4>
-																<div className="company-name">{ this.props.userInfo.clinic_name || 'No Company Name' }</div>
+																<div className="company-name">{ job.employer.clinic_name || 'No Company Name' }</div>
 																<div className="street">
-																	<span className="fa fa-map-marker"></span> { this.props.userInfo.office_location }
+																	<span className="fa fa-map-marker"></span> { job.job_location }
 																</div>
 																<div className="date">
 																	<strong>
-																		<span className="fa fa-calendar"></span> { job.skills_required } { job.job_location }
+																		<span className="fa fa-calendar"></span> { job.days } { job.time.split(',').length > 1 ? job.time.split(',')[0] + ':00' + '~' + job.time.split(',')[1]  + ':00' : 'No Time'  } 
 																	</strong>
 																</div>
 																<button className="btn btn-bordered-info">Post Reviews</button>

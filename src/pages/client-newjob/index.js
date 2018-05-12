@@ -34,9 +34,10 @@ class ClientNewJob extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			locations: [1,],
+			locations: ['first',],
 			skillList: [],
 			dayList: [{ val: 'Monday', checked: false }, { val: 'Tuesday', checked: false }, { val: 'Wednesday', checked: false }, { val: 'Thursday', checked: false }, { val: 'Friday', checked: false }, { val: 'Saturday', checked: false }, { val: 'Sunday', checked: false }],
+			days: [],
 			isSchedule: true,
 			isSpecific: false,
 
@@ -44,7 +45,8 @@ class ClientNewJob extends React.Component {
 			title: '',
 			start_time: '',
 			end_time: '',
-			jobLocations: {}, 
+			jobLocations: {},
+			specifc_date: '',
 		}
 		this.onChangeValue = this.onChangeValue.bind(this);
 		this.submitForm = this.submitForm.bind(this);
@@ -92,31 +94,40 @@ class ClientNewJob extends React.Component {
 			for(let key in this.state.jobLocations) {
 				locations.push(this.state.jobLocations[key]);
 			}
-			let days = [];
-			this.state.dayList.forEach((day) => {
-				if (day.checked) days.push(day.val);
-			});
+			
 			let obj = {
 				job_title: this.state.title,
 				skills_required: skills,
 				job_location: locations,
-				days: days,
-				time: [this.state.start_time.split(':')[0], this.state.end_time.split(':')[0]],
 				employers_id: this.props.userInfo.id
 			}
-			if (this.state.isSchedule) obj.schedule_type = 'schedule';
-			if (this.state.isSpecific) obj.schedule_type = 'specific';
+			if (this.state.isSchedule) {
+				obj.schedule_type = 0;
+				let days = [];
+				this.state.dayList.forEach((day) => {
+					if (day.checked) days.push(day.val);
+				});
+				obj.days = days;
+				obj.time = [this.state.start_time.split(':')[0], this.state.end_time.split(':')[0]];
+			}
+			if (this.state.isSpecific) {
+				obj.schedule_type = 1;
+				obj.days = Object.assign([], this.state.days);
+				obj.specifc_date = this.state.specifc_date;
+			}
 			this.props.actions.postNewJob(obj).then((res) => {
 				if (res) {
 					toastr["success"]("Posting new job success.");
 					this.setState({locations: [1,]});
 					this.setState({dayList: [{ val: 'Monday', checked: false }, { val: 'Tuesday', checked: false }, { val: 'Wednesday', checked: false }, { val: 'Thursday', checked: false }, { val: 'Friday', checked: false }, { val: 'Saturday', checked: false }, { val: 'Sunday', checked: false }]});
+					this.setState({days: []});
 					this.setState({isSchedule: true});
 					this.setState({isSpecific: false});
 					this.setState({title: ''});
 					this.setState({start_time: ''});
 					this.setState({end_time: ''});
 					this.setState({jobLocations: {}});
+					this.setState({ specifc_date: '' });
 					let objList = [];
 					this.props.jobSkills.forEach((skill) => {
 						objList.push({ id: skill.category, val: skill.category, checked: false });
@@ -143,6 +154,9 @@ class ClientNewJob extends React.Component {
 			case 'end_time':
 				val != 'not_valid' ? this.setState({ end_time: val }) : $('#btn_post').attr('disabled','disabled');
 				break;
+			case 'specifc_date':
+				val != 'not_valid' ? this.setState({ specifc_date: val }) : $('#btn_post').attr('disabled','disabled');
+				break;
 		}
 		if (field.indexOf('location') > -1) {
 			let objList = Object.assign({}, this.state.jobLocations);
@@ -159,8 +173,12 @@ class ClientNewJob extends React.Component {
 		e.preventDefault();
 		let nowLength = this.state.locations.length;
 		let locations = Object.assign([], this.state.locations);
-		nowLength += 1;
-		locations.push(nowLength);
+		let str = '';
+		locations.forEach((local) => {
+			str += local;
+		});
+		str += 'newone';
+		locations.push(str);
 		this.setState({ locations: locations });
 	}
 
@@ -170,13 +188,13 @@ class ClientNewJob extends React.Component {
 			let currentLocations = Object.assign([], this.state.locations);
 			let newLocations = [];
 			currentLocations.forEach((loca, ind) => {
-				if (index != ind) {
+				if (loca != location) {
 					newLocations.push(loca);
 				}
 			});
+			this.setState({ locations: newLocations });
 			let currentJobLocals = Object.assign([], this.state.jobLocations);
 			let newJobLocals = {};
-			this.setState({ locations: newLocations });
 			newLocations.forEach((loca, index) => {
 				newJobLocals['location' + loca] = currentJobLocals['location' + loca];
 			});
@@ -209,6 +227,9 @@ class ClientNewJob extends React.Component {
 	}
 
 	onChangeScheduleType(e, type) {
+		this.setState({ days: [] });
+		this.setState({ dayList: [{ val: 'Monday', checked: false }, { val: 'Tuesday', checked: false }, { val: 'Wednesday', checked: false }, { val: 'Thursday', checked: false }, { val: 'Friday', checked: false }, { val: 'Saturday', checked: false }, { val: 'Sunday', checked: false }] });
+
 		if (type == 'schedule') {
 			this.setState({ isSchedule: e.target.checked });
 			let pastStatus = this.state.isSpecific;
@@ -328,16 +349,30 @@ class ClientNewJob extends React.Component {
 														<input type="checkbox" name="inlineRadioOptions" id="inlineRadio2" value="option2" checked={this.state.isSpecific} onChange={(e) => {this.onChangeScheduleType(e, 'specific')}} /> Specific Date
 													</label>
 													<div className="col-xs-12 mt-2">
-														<div className="row">
-															<div className="col-xs-6">
-																<label className="sr-only" htmlFor="startTime">Start Time</label>
-																<SelectInput field={'start_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.start_time} withValid={'true'} label={'Start Time'} data={timeList} />
-															</div>
-															<div className="col-xs-6">
-																<label className="sr-only" htmlFor="endTime">End Time</label>
-																<SelectInput field={'end_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.end_time} withValid={'true'} label={'End Time'} data={timeList} />
-															</div>
-														</div>
+														{
+															this.state.isSchedule ?
+																<div className="row">
+																	<div className="col-xs-6">
+																		<label className="sr-only" htmlFor="startTime">Start Time</label>
+																		<SelectInput field={'start_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.start_time} withValid={'true'} label={'Start Time'} data={timeList} />
+																	</div>
+																	<div className="col-xs-6">
+																		<label className="sr-only" htmlFor="endTime">End Time</label>
+																		<SelectInput field={'end_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.end_time} withValid={'true'} label={'End Time'} data={timeList} />
+																	</div>
+																</div>
+															: ""
+														}
+														{
+															this.state.isSpecific ?
+																<div className="row">
+																	<div className="col-xs-12">
+																		<label className="sr-only" htmlFor="specificDate">Specific Date</label>
+																		<TextInput type={'date'} field={'specifc_date'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.specifc_date} withValid={'true'} label={'Specific Date'} />
+																	</div>
+																</div>
+															: ""
+														}
 													</div>
 												</div>
 											</div>

@@ -116,9 +116,14 @@ export const updateClientUser = (obj) => {
 export const saveStaffProfile = (obj) => {
 	return (dispatch) => {
 		dispatch({ type: COMMON.SERVER_REQUEST });
-		return POST(api_url + "jobs/staffMembers/edit.json", obj).then((res) => {
-			console.log(res);
-			return true;
+		return POST(api_url + "staffMembers/edit.json", obj).then((res) => {
+			dispatch({ type: COMMON.SERVER_SUCCESS });
+			if (res.data.success == '1') {
+				dispatch({ type: AUTH.UPDATING_STAFF_PROFILE, item: obj });
+				return true;
+			} else {
+				return false;
+			}
 		}).catch((err) => {
 			dispatch({ type: COMMON.SERVER_FAILURE });
 			throw err;
