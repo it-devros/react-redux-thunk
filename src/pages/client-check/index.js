@@ -68,7 +68,7 @@ class ClientCheck extends React.Component {
 											<div className="form-group">
 												<label htmlFor="job" className="col-sm-3 control-label">Check In</label>
 												<div className="col-sm-9">
-													<label className="switch">
+													<label className="switch-box">
 														<input type="checkbox" checked onChange={this.onChangeCheckBox} />
 														<span className="slider round"></span>
 													</label>
