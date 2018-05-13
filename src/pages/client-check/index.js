@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
 	return ({
-		completedJobs: state.job.completedJobs,
+		pastJobs: state.job.pastJobs,
 	});
 }
 
@@ -56,7 +56,7 @@ class ClientCheck extends React.Component {
 												<div className="col-sm-9">
 													<select className="form-control">
 														{
-															this.props.completedJobs.map((job, index) => {
+															this.props.pastJobs.map((job, index) => {
 																return (
 																	<option key={index} value={job.id}>{job.job_title}</option>
 																);

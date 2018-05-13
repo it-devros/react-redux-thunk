@@ -75,7 +75,7 @@ class StaffPastJob extends React.Component {
 																</div>
 																<div className="date">
 																	<strong>
-																		<span className="fa fa-calendar"></span> { job.days } { job.time.split(',').length > 1 ? job.time.split(',')[0] + ':00' + '~' + job.time.split(',')[1]  + ':00' : 'No Time'  } 
+																		<span className="fa fa-calendar"></span> { job.days } { job.time && job.time.split(',').length > 1 ? job.time.split(',')[0] + ':00' + '~' + job.time.split(',')[1]  + ':00' : 'No Time'  } 
 																	</strong>
 																</div>
 																<button className="btn btn-bordered-info">Post Reviews</button>

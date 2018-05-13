@@ -16,7 +16,7 @@ import './style.scss';
 
 const mapDispatchToProps = (dispatch) => {
 	return ({
-		actions: bindActionCreators({...jobActions}, dispatch),
+		actions: bindActionCreators({...jobActions}, dispatch),	
 	});
 }
 
@@ -56,6 +56,7 @@ class ClientNewJob extends React.Component {
 		this.onChangeDay = this.onChangeDay.bind(this);
 		this.onChangeScheduleType = this.onChangeScheduleType.bind(this);
 		this.removeLocation = this.removeLocation.bind(this);
+		this.onChangeSpecificDate = this.onChangeSpecificDate.bind(this);
 	}
 
 	componentWillMount() {
@@ -71,6 +72,11 @@ class ClientNewJob extends React.Component {
 			objList.push({ id: skill.category, val: skill.category, checked: false });
 		});
 		this.setState({ skillList: objList });
+		$('#datetime_picker').datetimepicker();
+	}
+
+	componentDidUpdate() {
+		$('#datetime_picker').datetimepicker();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -99,7 +105,8 @@ class ClientNewJob extends React.Component {
 				job_title: this.state.title,
 				skills_required: skills,
 				job_location: locations,
-				employers_id: this.props.userInfo.id
+				employers_id: this.props.userInfo.id,
+				time: [this.state.start_time.split(':')[0], this.state.end_time.split(':')[0]],
 			}
 			if (this.state.isSchedule) {
 				obj.schedule_type = 0;
@@ -108,12 +115,12 @@ class ClientNewJob extends React.Component {
 					if (day.checked) days.push(day.val);
 				});
 				obj.days = days;
-				obj.time = [this.state.start_time.split(':')[0], this.state.end_time.split(':')[0]];
 			}
 			if (this.state.isSpecific) {
 				obj.schedule_type = 1;
-				obj.days = Object.assign([], this.state.days);
-				obj.specifc_date = this.state.specifc_date;
+				obj.days = [];
+				obj.days.push($("#specific_date").val());
+				obj.specifc_date = $("#specific_date").val();
 			}
 			this.props.actions.postNewJob(obj).then((res) => {
 				if (res) {
@@ -154,9 +161,6 @@ class ClientNewJob extends React.Component {
 			case 'end_time':
 				val != 'not_valid' ? this.setState({ end_time: val }) : $('#btn_post').attr('disabled','disabled');
 				break;
-			case 'specifc_date':
-				val != 'not_valid' ? this.setState({ specifc_date: val }) : $('#btn_post').attr('disabled','disabled');
-				break;
 		}
 		if (field.indexOf('location') > -1) {
 			let objList = Object.assign({}, this.state.jobLocations);
@@ -167,6 +171,12 @@ class ClientNewJob extends React.Component {
 			});
 			this.setState({ jobLocations: objList });
 		}
+	}
+
+	onChangeSpecificDate(e) {
+		e.preventDefault();
+		console.log(e.target.value);
+		this.setState({ specifc_date: e.target.value });
 	}
 
 	addLocation(e) {
@@ -243,17 +253,29 @@ class ClientNewJob extends React.Component {
 	}
 
 	validate() {
-		if (this.state.title == '' || this.state.start_time == '' || this.state.end_time == '') {
+		if (this.state.title == '') {
 			toastr["error"]("Job Form validation error.");
 			return false;
 		}
-		let flag_days = 0;
-		this.state.dayList.forEach((day) => {
-			if (day.checked) flag_days += 1;
-		});
-		if (flag_days == 0) {
-			toastr["error"]("Please select the day.");
-			return false;
+		if (this.state.isSchedule) {
+			if (this.state.start_time == '' || this.state.end_time == '') {
+				toastr["error"]("Please input the time");
+				return false
+			}
+			let flag_days = 0;
+			this.state.dayList.forEach((day) => {
+				if (day.checked) flag_days += 1;
+			});
+			if (flag_days == 0) {
+				toastr["error"]("Please select the day.");
+				return false;
+			}
+		}
+		if (this.state.isSpecific) {
+			if ($("#specific_date").val() == '' || this.state.start_time == '' || this.state.end_time == '') {
+				toastr["error"]("Please input the specific date");
+				return false;
+			}
 		}
 		return true;
 	}
@@ -350,29 +372,29 @@ class ClientNewJob extends React.Component {
 													</label>
 													<div className="col-xs-12 mt-2">
 														{
-															this.state.isSchedule ?
-																<div className="row">
-																	<div className="col-xs-6">
-																		<label className="sr-only" htmlFor="startTime">Start Time</label>
-																		<SelectInput field={'start_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.start_time} withValid={'true'} label={'Start Time'} data={timeList} />
-																	</div>
-																	<div className="col-xs-6">
-																		<label className="sr-only" htmlFor="endTime">End Time</label>
-																		<SelectInput field={'end_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.end_time} withValid={'true'} label={'End Time'} data={timeList} />
-																	</div>
-																</div>
-															: ""
-														}
-														{
 															this.state.isSpecific ?
 																<div className="row">
-																	<div className="col-xs-12">
-																		<label className="sr-only" htmlFor="specificDate">Specific Date</label>
-																		<TextInput type={'date'} field={'specifc_date'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.specifc_date} withValid={'true'} label={'Specific Date'} />
+																	<div className="col-xs-12" style={{ marginBottom: '10px' }}>
+																		<div id="datetime_picker" className="input-group input-append date">
+																			<input id="specific_date" type="text" className="form-control" readOnly />
+																			<div className="input-group-addon">
+																				<span className="glyphicon glyphicon-th"></span>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 															: ""
 														}
+														<div className="row">
+															<div className="col-xs-6">
+																<label className="sr-only" htmlFor="startTime">Start Time</label>
+																<SelectInput field={'start_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.start_time} withValid={'true'} label={'Start Time'} data={timeList} />
+															</div>
+															<div className="col-xs-6">
+																<label className="sr-only" htmlFor="endTime">End Time</label>
+																<SelectInput field={'end_time'} className={'form-control'} changed={ this.onChangeValue } initial={this.state.end_time} withValid={'true'} label={'End Time'} data={timeList} />
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
