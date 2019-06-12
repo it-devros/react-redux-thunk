@@ -13,8 +13,12 @@
     First time running the starter kit? Then complete the [Initial Machine Setup](#initial-machine-setup).
 
 2. **Clone the project**
-
+  
+    This is cloned from react-slingshot boilerplate so if you want to buid your own react project, then clone from that repo.
     `git clone https://github.com/coryhouse/react-slingshot.git`.
+    
+    You can clone from this repo for review.
+    `git clone https://github.com/it-devros/react-redux-thunk.git`.
 
 3. **Run the setup script**
 
